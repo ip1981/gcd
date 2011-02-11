@@ -1,12 +1,9 @@
-% Synopsis:
-% # gplc gcd.pro
-% # ./gcd
-% | ?- gcd2(22, 121, 11).
-% | ?- gcd2(22, 121, X).
-% | ?- gcdn([22, 33], 11).
-% | ?- gcdn([22, 33, 44], 11).
-% | ?- gcdn([22], 11).      
-% | ?- gcdn([22, 33, 44], B). 
+% SYNOPSIS.
+%
+% Tested with GNU Prolog 1.3.1
+%
+% # gplc --no-top-level gcd.pro
+% # ./gcd 22 33 44 121
 
 
 % 1st number, 2nd number, GCD
@@ -24,12 +21,15 @@ gcdn(A, [B|Bs], G) :- gcd2(A, B, N), gcdn(N, Bs, G).
 gcdn([A|As], G) :- gcdn(A, As, G).
 
 % http://www.gprolog.org/manual/html_node/gprolog008.html#toc9
-%:- initialization(main).
+:- initialization(main).
 
+str2int([], []).
+str2int([S|St], [N|Nt]) :- number_atom(N, S), str2int(St, Nt).
 
 % http://www.fraber.de/bap/bap76.html
-%main :-
-%    argument_list(Args),
-%    gcdn(Numbers, G),
-%    write(G), nl.
+main :-
+    argument_list(Args),
+    str2int(Args, Numbers),
+    gcdn(Numbers, G),
+    write(G), nl.
 
