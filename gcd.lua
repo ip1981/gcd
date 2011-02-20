@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
 
--- SYNOSPSIS:
+-- SYNOPSIS:
 -- # chmod +x gcd.lua; ./gcd.lua 121 22 33 44
 -- # lua gcd.lua 121 33 22
 
