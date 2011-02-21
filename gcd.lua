@@ -14,8 +14,8 @@ function gcd2(a, b)
 end
 
 function gcdn(ns)
-    r = ns[1]
-    for i = 2, table.maxn(ns) do
+    local r = ns[1]
+    for i = 2, #ns do
         r = gcd2(r, ns[i])
     end
     return r
