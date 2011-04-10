@@ -1,3 +1,14 @@
+/*
+ * SYNOPSIS:
+ *
+ * # gcj -o gcd --main=gcd gcd.java
+ * # ./gcd 11 22 33 44 121
+ *
+ * # javac gcd.java
+ * # java gcd 11 22 33
+ *
+ */
+
 public class gcd
 {
     public static int gcd2(int a, int b) {
