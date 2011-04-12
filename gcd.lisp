@@ -1,3 +1,8 @@
+; SYNOPSIS:
+; # clisp gcd.lisp 11 22 33 121
+; # sbcl --script gcd.lisp 121 22 33
+;
+
 (defun gcd2 (a b)
   (if (= b 0)
     a 
