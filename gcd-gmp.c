@@ -20,6 +20,8 @@ void gcd2(mpz_t r, mpz_t a1, mpz_t b1)
         mpz_set(a, r);    /* a = r; */
     }
     mpz_set(r, a);
+    mpz_clear(a);
+    mpz_clear(b);
 }
 
 void gcdn(mpz_t r, mpz_t a[], size_t n)
