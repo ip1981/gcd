@@ -59,6 +59,10 @@ int main (int argc, char *argv[])
             stringstream str;
             str << argv[n];
             str >> ns[n-1];
+            /* NOTE:
+             * For GMP we can just assign: ns[n-1] = argv[n],
+             * and sstream is not needed.
+             */
         }
         cout << gcd(ns) << endl;
     }
