@@ -109,14 +109,13 @@ _start:
     xor %rax, %rax
 gcd_loop:
     pop %rsi  # get next command line argument
-    # Well, we used all rrgisters, now we DO NEED stack :-)
-    push %rcx # save argument counter
-    push %rax # save current GCD
+    mov %rcx, %r8 # save argument counter
+    mov %rax, %r9 # save current GCD
     call str2uint # convert string at rsi to integer at rbx
-    pop %rax  # restore current GCD
+    mov %r9, %rax # restore current GCD
     call gcd2 # gcd of rax and rbx (returned by str2uint)
     # now rax is a GCD
-    pop %rcx  # restore argument counter
+    mov %r8, %rcx # restore argument counter
     loop gcd_loop
 
     call print # print rax with GCD
