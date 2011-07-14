@@ -76,7 +76,7 @@ next_digit:
     push $1   # write to stdout
     push $0   # dummy
     int $0x91 # do syscall (print the number)
-    add $16, %esp # clean stack 16 = 3 * 4 (32 bits!)
+    add $16, %esp # clean stack 16 = 4 pushs * 4 bytes (32 bits!)
 
     ret
 
