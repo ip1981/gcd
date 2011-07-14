@@ -1,20 +1,20 @@
-# This program is for Linux on Intel x86 arch (32 bits).
+# This program is for Solaris 11 on Intel x86 arch (32 bits).
 # Written for GNU Assembler (as) with AT&T syntax
 
 # To make an executable binary:
-# gcc -nostdlib gcd-x86-linux.s -o gcd-x86-linux
+# gcc -nostdlib gcd-x86-solaris.s -o gcd-x86-solaris
 # or
-# as gcd-x86-linux.s -o gcd-x86-linux.o && \
-#    ld gcd-x86-linux.o -o gcd-x86-linux
+# as gcd-x86-solaris.s -o gcd-x86-solaris.o && \
+#    ld gcd-x86-solaris.o -o gcd-x86-solaris
 
 # On 64 bits system:
-# gcc -m32 -nostdlib gcd-x86-linux.s -o gcd-x86-linux
+# gcc -m32 -nostdlib gcd-x86-solaris.s -o gcd-x86-solaris
 # or
-# as --32 gcd-x86-linux.s -o gcd-x86-linux.o && \
-#    ld -melf_i386 gcd-x86-linux.o -o gcd-x86-linux
+# as --32 gcd-x86-solaris.s -o gcd-x86-solaris.o && \
+#    ld -melf_i386 gcd-x86-solaris.o -o gcd-x86-solaris
 #
 # To run:
-# ./gcd-x86-linux 11 22 33 121 792
+# ./gcd-x86-solaris 11 22 33 121 792
 # (output should be 11)
 
 
@@ -113,9 +113,9 @@ _start:
 
     # Access command line, see:
     # http://www.cin.ufpe.br/~if817/arquivos/asmtut/index.html
-    # Example: ./gcd-x86-linux 11 22 33
+    # Example: ./gcd-x86-solaris 11 22 33
     pop %ecx # Get the number of command-line options (4)
-    pop %esi # Get the pointer to the program name (./gcd-x86-linux),
+    pop %esi # Get the pointer to the program name (./gcd-x86-solaris),
     dec %ecx # minus program name
     jz exit  # no arguments are given - exiting
 
