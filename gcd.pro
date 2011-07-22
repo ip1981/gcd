@@ -20,13 +20,11 @@ gcdn(A, [], A).
 gcdn(A, [B|Bs], G) :- gcd2(A, B, N), gcdn(N, Bs, G).
 gcdn([A|As], G) :- gcdn(A, As, G).
 
-% http://www.gprolog.org/manual/html_node/gprolog008.html#toc9
 :- initialization(main).
 
 str2int([], []).
 str2int([S|St], [N|Nt]) :- number_atom(N, S), str2int(St, Nt).
 
-% http://www.fraber.de/bap/bap76.html
 main :-
     argument_list(Args),
     str2int(Args, Numbers),
