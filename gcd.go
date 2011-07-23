@@ -5,7 +5,7 @@
  # gccgo gcd.go -o gcd-go
  # ./gcd-go 11 22 33 44 121
 
- With Google Go (maybe 6g, 8g):
+ With Google Go (6g for amd64, 8g for x86, http://golang.org/cmd/):
  # 6g -o gcd-go.o  gcd.go
  # 6l -o gcd-go-6g gcd-go.o
  # ./gcd-go-6g 11 22 33 44 121
