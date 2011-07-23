@@ -17,7 +17,7 @@
 
 package main
 
-// Both Google Go and GCC issues an error "imported and not used",
+// Both Google Go and GCC issue an error "imported and not used",
 // if imported and not used :-)
 import "fmt"
 import "flag"
