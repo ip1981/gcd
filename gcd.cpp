@@ -8,7 +8,7 @@
  *
  * To use GNU Multiple Precision Arithmetic Library:
  * 
- * # g++ -o gcd-cpp-gmp -DGMP -lgmpxx gcd.cpp
+ * # g++ -o gcd-cpp-gmp -DGMP -lgmpxx -lgmp gcd.cpp
  * # ./gcd-cpp-gmp 1234567890987654321 987654321234567
  * # 63
  *
