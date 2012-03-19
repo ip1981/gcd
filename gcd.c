@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-unsigned int gcd2(unsigned int a, unsigned int b)
+static unsigned long int gcd2(unsigned long int a, unsigned long int b)
 {
-    unsigned int c;
+    unsigned long int c;
     while (b != 0) {
         c = b;
         b = a % b;
@@ -12,9 +12,9 @@ unsigned int gcd2(unsigned int a, unsigned int b)
     return a;
 }
 
-unsigned int gcdn(unsigned int a[], size_t n)
+static unsigned long int gcdn(unsigned long int *a, size_t n)
 {
-    unsigned int r;
+    unsigned long int r;
     size_t i;
     r = a[0];
     for(i = 1; i < n; i++) {
@@ -26,16 +26,16 @@ unsigned int gcdn(unsigned int a[], size_t n)
 
 int main (int argc, char *argv[])
 {
-    unsigned int *a;
-    int i, n;
+    unsigned long int *a;
+    size_t i, n;
 
     if (argc > 1) {
-        n = argc - 1;
-        a = malloc(sizeof(unsigned int) * n);
+        n = (size_t)(argc - 1);
+        a = malloc(sizeof(unsigned long int) * n);
         if (NULL != a) {
             for (i = 1; i <= n; i++)
-                a[i-1] = atoi(argv[i]);
-            printf("%u\n", gcdn(a, n));
+                a[i-1] = strtoul(argv[i], NULL, 10);
+            printf("%lu\n", gcdn(a, n));
             free(a);
             return EXIT_SUCCESS;
         }
