@@ -5,10 +5,11 @@
  # gccgo gcd.go -o gcd-go
  # ./gcd-go 11 22 33 44 121
 
- With Google Go (6g for amd64, 8g for x86, http://golang.org/cmd/):
- # 6g -o gcd-go.o  gcd.go
- # 6l -o gcd-go-6g gcd-go.o
- # ./gcd-go-6g 11 22 33 44 121
+ With Google Go (http://golang.org/):
+ # go run gcd.go 11 22 33 44 121
+ # or, if you want to play with the binary
+ # go build -o gcd-go gcd.go
+ # ./gcd-go 11 22 33 44 121
 
  GCC makes dynamically linked binary,
  but Google Go - statically linked
