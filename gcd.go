@@ -18,8 +18,6 @@
 
 package main
 
-// Both Google Go and GCC issue an error "imported and not used",
-// if imported and not used :-)
 import (
 	"fmt"
 	"os"
@@ -30,10 +28,6 @@ func gcd2(a, b uint64) uint64 {
 	if b == 0 {
 		return a
 	}
-	/* 6g issues an error "function ends without a return statement",
-	   if we use if ... {... return} else {... return}.
-	   But GCC doesn't.
-	*/
 	return gcd2(b, a%b)
 }
 
