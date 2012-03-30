@@ -20,9 +20,11 @@ package main
 
 // Both Google Go and GCC issue an error "imported and not used",
 // if imported and not used :-)
-import "fmt"
-import "flag"
-import "strconv"
+import (
+	"flag"
+	"fmt"
+	"strconv"
+)
 
 func gcd2(a, b uint64) uint64 {
 	if b == 0 {
@@ -35,12 +37,11 @@ func gcd2(a, b uint64) uint64 {
 	return gcd2(b, a%b)
 }
 
-func gcdn(ns []uint64) uint64 {
-	var r uint64 // zero by default
+func gcdn(ns []uint64) (r uint64) {
 	for i := range ns {
 		r = gcd2(r, ns[i])
 	}
-	return r
+	return
 }
 
 func main() {
