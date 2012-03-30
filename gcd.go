@@ -38,8 +38,8 @@ func gcd2(a, b uint64) uint64 {
 }
 
 func gcdn(ns []uint64) (r uint64) {
-	for i := range ns {
-		r = gcd2(r, ns[i])
+	for _, v := range ns {
+		r = gcd2(r, v)
 	}
 	return
 }
