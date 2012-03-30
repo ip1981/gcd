@@ -45,11 +45,11 @@ func gcdn(ns []uint64) (r uint64) {
 }
 
 func main() {
-	if len(os.Args) == 0 {
+	if len(os.Args) == 1 {
 		return
 	}
 	var ns []uint64 // We have garbage collector!
-	for _, arg := range os.Args {
+	for _, arg := range os.Args[1:] {
 		// Drop the second return value (error code):
 		v, _ := strconv.ParseUint(arg, 0, 64)
 		ns = append(ns, v)
