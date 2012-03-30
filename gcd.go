@@ -21,8 +21,8 @@ package main
 // Both Google Go and GCC issue an error "imported and not used",
 // if imported and not used :-)
 import (
-	"flag"
 	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -45,18 +45,14 @@ func gcdn(ns []uint64) (r uint64) {
 }
 
 func main() {
-	flag.Parse() // without this 6g will give flag.NArg() = 0 next (WTF?)
-	n := flag.NArg()
-	if n > 0 {
-		ns := make([]uint64, n) // We have garbage collector!
-
-		// Or: for i := range ns, since range of ns is equal to flag.NArg()
-		for i := 0; i < n; i++ {
-			// Drop the second return value (error code):
-			ns[i], _ = strconv.ParseUint(flag.Arg(i), 0, 64)
-		}
-
-		g := gcdn(ns)
-		fmt.Printf("%v\n", g)
+	if len(os.Args) == 0 {
+		return
 	}
+	var ns []uint64 // We have garbage collector!
+	for _, arg := range os.Args {
+		// Drop the second return value (error code):
+		v, _ := strconv.ParseUint(arg, 0, 64)
+		ns = append(ns, v)
+	}
+	fmt.Printf("%v\n", gcdn(ns))
 }
