@@ -31,7 +31,7 @@ int main (int argc, char *argv[])
 
     if (argc > 1) {
         n = (size_t)(argc - 1);
-        a = malloc(sizeof(unsigned long int) * n);
+        a = (unsigned long int*) malloc(sizeof(unsigned long int) * n);
         if (NULL != a) {
             for (i = 1; i <= n; i++)
                 a[i-1] = strtoul(argv[i], NULL, 10);
