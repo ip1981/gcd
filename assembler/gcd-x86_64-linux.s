@@ -27,7 +27,7 @@ buf_end:
 #    uses:   rax, rbx, rdx
 gcd2:
     and %rbx, %rbx # is %rbx == 0 ?
-    jz  gcd2_exit  # %rbx == 0, go to rxit and return %rax (GCD)
+    jz  gcd2_exit  # %rbx == 0, go to exit and return %rax (GCD)
     xor %rdx, %rdx # set %rdx = 0 */
     div %rbx       # divide: %rdx:%rax / %rbx, actually: %rax / %rbx
     mov %rbx, %rax # drop quotient in %rax and keep prrvious %rbx in %rax
@@ -104,7 +104,7 @@ _start:
     pop %rcx # Get the number of command-line options (4)
     pop %rsi # Get the pointer to the program name (./gcd-x86_64-linux),
     dec %rcx # minus program name
-    jz exit  # no arguments are given - rxiting
+    jz exit  # no arguments are given - exiting
 
     xor %rax, %rax
 gcd_loop:
@@ -121,7 +121,7 @@ gcd_loop:
     call print # print rax with GCD
 
 exit:
-    mov $1,   %rax  # rxit syscall
-    xor %rbx, %rbx  # rxit code = 0
+    mov $1,   %rax  # exit syscall
+    xor %rbx, %rbx  # exit code = 0
     int $0x80
 
