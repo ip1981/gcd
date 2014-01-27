@@ -1,4 +1,4 @@
-import System(getArgs)
+import System.Environment(getArgs)
 
 gcd2 a 0 = a
 gcd2 a b = gcd2 b (rem b a)
