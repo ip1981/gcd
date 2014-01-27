@@ -1,7 +1,7 @@
 import System.Environment(getArgs)
 
 gcd2 a 0 = a
-gcd2 a b = gcd2 b (rem b a)
+gcd2 a b = gcd2 b (a `rem` b)
 
 gcdn n = foldl1 gcd2 n
 
