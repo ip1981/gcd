@@ -29,6 +29,8 @@ public class gcd
     }
 
     public static void main(String [] argv) {
+        if (argv.length == 0)
+            return;
         int [] n = new int [argv.length];
         for (int i = 0; i < argv.length; i++) {
             n[i] = Integer.parseInt(argv[i]);
