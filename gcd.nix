@@ -21,10 +21,9 @@ trace: gcd2: 11 <-> 0
 list:
 
 let
-  inherit (builtins) div toString trace
-                     tail head;
+  inherit (builtins) trace tail head;
 
-  rem = x: y: x - y*(div x y);
+  rem = x: y: x - y*(x / y);
 
   gcd2 = x: y: trace "gcd2: ${toString x} <-> ${toString y}"
     (if y == 0 then x else gcd2 y (rem x y));
