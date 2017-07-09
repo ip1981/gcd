@@ -1,36 +1,46 @@
-{Tested with FreePascal 2.4.0}
+{
+FreePascal: https://www.freepascal.org/
+Tested with FreePascal 2.4.0, 3.0.0
 
-program GCD(output);
-uses sysutils; {StrToInt}
+Usage:
 
-function gcd2(a: integer; b: integer): integer;
-var c: integer;
-begin
-    while b <> 0 do
-    begin
-        c := b;
-        b := a mod b;
-        a := c;
-    end;
-    gcd2 := a;
-end;
+  $ fpc gcd.pas -ogcd-pas
+  $ ./gcd-pas 44 55 66 121
+  11
 
-function gcdn(n: array of integer): integer;
-var i: integer;
-begin
-    gcdn := n[0];
-    for i := 1 to High(n) do {See also <http://wiki.freepascal.org/for-in_loop> }
-        gcdn := gcd2(gcdn, n[i]);
-end;
+}
+
+Program GCD(output);
+
+Uses sysutils; {StrToInt}
+
+Function gcd2(a: integer; b: integer): integer;
+Var c: integer;
+Begin
+  While b <> 0 Do
+    Begin
+      c := b;
+      b := a Mod b;
+      a := c;
+    End;
+  gcd2 := a;
+End;
+
+Function gcdn(n: Array Of integer): integer;
+Var i: integer;
+Begin
+  gcdn := n[0];
+  For i := 1 To High(n) Do {See also <http://wiki.freepascal.org/for-in_loop> }
+    gcdn := gcd2(gcdn, n[i]);
+End;
 
 
-var
-    n: array of integer;
-    i: integer;
-begin
-    SetLength(n, ParamCount);
-    for i := 1 to ParamCount do
-        n[i-1] := StrToInt(ParamStr(i));
-    Writeln(gcdn(n))
-end.
-
+Var
+  n: array Of integer;
+  i: integer;
+Begin
+  SetLength(n, ParamCount);
+  For i := 1 To ParamCount Do
+    n[i-1] := StrToInt(ParamStr(i));
+  Writeln(gcdn(n))
+End.
