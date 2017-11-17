@@ -5,25 +5,24 @@
 !
 
 program GCD
-implicit none
+  implicit none
 
-integer, allocatable :: ns(:)
-integer :: i, n
-character*20 :: tmpstr
+  integer, allocatable :: ns(:)
+  integer :: i, n
+  character*20 :: tmpstr
 
-n = command_argument_count()
+  n = command_argument_count()
 
-allocate(ns(n)) ! allocate memory for numbers given in command line
+  allocate (ns(n)) ! allocate memory for numbers given in command line
 
-do i = 1, n
+  do i = 1, n
     call get_command_argument(i, tmpstr)
     ns(i) = str2int(tmpstr)
-end do
+  end do
 
-print *,  gcdn(ns)
+  print *, gcdn(ns)
 
-deallocate(ns)
-
+  deallocate (ns)
 
 ! If we declare functions first,
 ! we have to specify its types within
@@ -31,27 +30,27 @@ deallocate(ns)
 ! See http://en.wikibooks.org/wiki/Fortran/Fortran_procedures_and_functions
 contains
 
-pure integer function str2int (s)
+  pure integer function str2int(s)
     character*(*), intent(in) :: s
     read (s, *) str2int
-end function
+  end function
 
-pure recursive integer function gcd2 (a, b) result(GCD)
+  pure recursive integer function gcd2(a, b) result(GCD)
     integer, intent(in) :: a, b
     if (b == 0) then
-        GCD = a
+      GCD = a
     else
-        GCD = gcd2(b, mod(a, b))
+      GCD = gcd2(b, mod(a, b))
     end if
-end function gcd2
+  end function gcd2
 
-pure integer function gcdn(n)
+  pure integer function gcdn(n)
     integer, intent(in) :: n(:) ! n is an array
     integer :: i
     gcdn = n(1)
     do i = 2, size(n)
-        gcdn = gcd2(gcdn, n(i))
+      gcdn = gcd2(gcdn, n(i))
     end do
-end function
+  end function
 
 end program
