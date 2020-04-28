@@ -1,17 +1,14 @@
 use std::env;
 
-fn gcd2(a: u64, b: u64) -> u64
+fn gcd2(mut a: u64, mut b: u64) -> u64
 {
-  let mut a1 = a;
-  let mut b1 = b;
-
-  while b1 != 0 {
-    let c1 = b1;
-    b1 = a1 % b1;
-    a1 = c1;
+  while b != 0 {
+    let c = b;
+    b = a % b;
+    a = c;
   }
 
-  a1
+  a
 }
 
 
