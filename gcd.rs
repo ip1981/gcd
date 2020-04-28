@@ -17,7 +17,7 @@ fn main ()
   // XXX skip(1) to skip program name:
   let nums = env::args().skip(1).map(|s| s.parse().unwrap());
 
-  let gcd = nums.fold(0, |g, n| gcd2(g, n));
+  let gcd = nums.fold(0, gcd2);
 
   println!("{}", gcd);
 }
