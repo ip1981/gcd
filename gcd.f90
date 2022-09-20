@@ -1,6 +1,6 @@
 ! SYNOPSIS:
 !
-! # gfortran -o gcd-f gcd.f03
+! # gfortran -o gcd-f gcd.f90
 ! # ./gcd-f 11 22 33 121
 !
 
@@ -9,25 +9,21 @@ program GCD
 
   integer, allocatable :: ns(:)
   integer :: i, n
-  character*20 :: tmpstr
+  character(len=20) :: tmpstr
 
   n = command_argument_count()
 
-  allocate (ns(n)) ! allocate memory for numbers given in command line
+  allocate (ns(n))
 
   do i = 1, n
     call get_command_argument(i, tmpstr)
     ns(i) = str2int(tmpstr)
   end do
 
-  print *, gcdn(ns)
+  print '(I0)', gcdn(ns)
 
   deallocate (ns)
 
-! If we declare functions first,
-! we have to specify its types within
-! the `program' section.
-! See http://en.wikibooks.org/wiki/Fortran/Fortran_procedures_and_functions
 contains
 
   pure integer function str2int(s)
@@ -45,7 +41,7 @@ contains
   end function gcd2
 
   pure integer function gcdn(n)
-    integer, intent(in) :: n(:) ! n is an array
+    integer, intent(in) :: n(:)
     integer :: i
     gcdn = n(1)
     do i = 2, size(n)
