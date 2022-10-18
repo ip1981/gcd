@@ -43,27 +43,26 @@ gcd2_exit:
 #    uses:  rax, rbx, rcx, rdx, rdi, buffer
 print:
     mov $10,  %rcx # set %rcx = 10 (radix)
-    mov $buf_end, %rdi
+    mov $buf_end, %rsi
 
 next_digit:
     xor %rdx, %rdx # set %rdx = 0
     div %rcx       # divide: %rdx:%rax / %rcx, actually: %rax / %rcx
     # %rdx is a remainder (0-9), it fits into %dl
     add  $48, %dl  # get ASCII code: 0 => 48 = '0', 1 => 49 = '1'
-    dec %rdi       # put remainders going from the end of the buffer
-    mov %dl, (%rdi)
+    dec %rsi       # put remainders going from the end of the buffer
+    mov %dl, (%rsi)
     # now rax is a quotient
     and %rax, %rax # is quotient == 0 ?
     jnz next_digit # quotient is not 0, go on
-    
+
     # printing the number:
-    mov $4,   %rax # syscall `write'
-    mov $1,   %rbx # write to stdout
-    mov %rdi, %rcx # first character to write
+    mov $1,   %rax # syscall `write'
+    mov $1,   %rdi # write to stdout
     mov $buf_end, %rdx
-    sub %rdi, %rdx # rdx is a number of characters to write (buf_end - rdi)
+    sub %rsi, %rdx # rdx is a number of characters to write (buf_end - rsi)
     inc %rdx       # + new line
-    int $0x80      # do syscall (print the number)
+    syscall        # do syscall (print the number at rsi)
 
     ret
 
@@ -121,7 +120,7 @@ gcd_loop:
     call print # print rax with GCD
 
 exit:
-    mov $1,   %rax  # exit syscall
-    xor %rbx, %rbx  # exit code = 0
-    int $0x80
+    mov $60,  %rax  # exit syscall
+    xor %rdi, %rdi  # exit code = 0
+    syscall
 
