@@ -1,7 +1,8 @@
 ; SYNOPSIS:
 ; # clisp gcd.lisp 11 22 33 121
+; # ecl --shell gcd.lisp  121 22 33
+; # gcl -f gcd.lisp 121 22 33
 ; # sbcl --script gcd.lisp 121 22 33
-;
 
 (defun gcd2 (a b)
   (if (= b 0)
@@ -12,18 +13,19 @@
   (reduce #'gcd2 (rest numbers)
           :initial-value (first numbers)))
 
-; Command line access is different on different Lisps
 (defun program-args ()
   (or
-   #+SBCL (rest *posix-argv*)
    #+CLISP *args*
-   ;#+ECL (ext:command-args)
-   ;#+CMU extensions:*command-line-words*
-   ;#+LISPWORKS system:*line-arguments-list*
+   #+ECL (ext:command-args)
+   #+GCL si::*command-args*
+   #+SBCL *posix-argv*
    nil))
 
-(write (apply #'gcdn 
-              (map 'list #'parse-integer (program-args))
-              ))
+(defun numbers ()
+  (remove nil
+          (map 'list (lambda (x) (parse-integer x :junk-allowed t))
+               (program-args))))
+
+(write (apply #'gcdn (numbers)))
 (fresh-line)
 
