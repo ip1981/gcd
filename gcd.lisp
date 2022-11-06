@@ -9,9 +9,8 @@
     a 
     (gcd2 b (mod a b))))
 
-(defun gcdn (&rest numbers)
-  (reduce #'gcd2 (rest numbers)
-          :initial-value (first numbers)))
+(defun gcdn (n &rest ns)
+  (reduce #'gcd2 ns :initial-value n))
 
 (defun program-args ()
   (or
@@ -26,6 +25,8 @@
           (map 'list (lambda (x) (parse-integer x :junk-allowed t))
                (program-args))))
 
-(write (apply #'gcdn (numbers)))
-(fresh-line)
+(let ((ns (numbers)))
+  (when ns
+    (write (apply #'gcdn ns))
+    (fresh-line)))
 
