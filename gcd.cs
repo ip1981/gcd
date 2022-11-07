@@ -1,32 +1,27 @@
 using System;
+using System.Linq;
 
-namespace GCD {
-    class Program {
-        static uint gcd2(uint a, uint b) {
-            uint c;
-            while (b != 0) {
-                c = b;
-                b = a % b;
-                a = c;
-            }
-            return a;
-        }
-
-        static uint gcdn(uint [] n) {
-            uint r = n[0];
-            for (int i = 1; i < n.Length; i++)
-                r = gcd2(r, n[i]);
-            return r;
-        }
-
-        static void Main(string [] argv) {
-            uint [] a = Array.ConvertAll<string, uint>(argv,
-                    new Converter<string, uint>
-                    (delegate(string s) {return uint.Parse(s);})
-                    );
-
-            Console.WriteLine("{0}", gcdn(a));
-        }
+class Program {
+  static ulong gcd2(ulong a, ulong b) {
+    ulong c;
+    while (b != 0) {
+      c = b;
+      b = a % b;
+      a = c;
     }
-}
+    return a;
+  }
 
+  static ulong gcdn(ulong[] nums) {
+    return nums.Aggregate(0UL, (gcd, n) => gcd2(gcd, n));
+  }
+
+  static void Main(string[] argv) {
+    ulong[] nums = Array.ConvertAll<string, ulong>(
+        argv, new Converter<string, ulong>(
+                  delegate(string s) { return ulong.Parse(s); }));
+
+    if (nums.Length > 0)
+      Console.WriteLine("{0}", gcdn(nums));
+  }
+}
