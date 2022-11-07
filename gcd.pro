@@ -2,8 +2,8 @@
 %
 % Tested with GNU Prolog 1.3.1
 %
-% # gplc --no-top-level gcd.pro
-% # ./gcd 22 33 44 121
+% # gplc --no-top-level -o gcd-pro gcd.pro
+% # ./gcd-pro 22 33 44 121
 
 
 % 1st number, 2nd number, GCD
