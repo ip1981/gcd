@@ -5,9 +5,9 @@
 ; # sbcl --script gcd.lisp 121 22 33
 
 (defun gcd2 (a b)
-  (if (= b 0)
-    a 
-    (gcd2 b (mod a b))))
+  (loop while (/= b 0) do
+    (psetq a b b (mod a b))
+    finally (return a)))
 
 (defun gcdn (n &rest ns)
   (reduce #'gcd2 ns :initial-value n))
