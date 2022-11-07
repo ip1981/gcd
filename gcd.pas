@@ -1,6 +1,6 @@
 {
 FreePascal: https://www.freepascal.org/
-Tested with FreePascal 2.4.0, 3.0.0
+Tested with FreePascal 3.2
 
 Usage:
 
@@ -39,8 +39,12 @@ Var
   n: array Of integer;
   i: integer;
 Begin
+  If ParamCount = 0 then exit;
+
   SetLength(n, ParamCount);
+
   For i := 1 To ParamCount Do
     n[i-1] := StrToInt(ParamStr(i));
+
   Writeln(gcdn(n))
 End.
