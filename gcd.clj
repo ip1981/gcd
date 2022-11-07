@@ -12,7 +12,7 @@
 (defn gcd2 [a b]
   (if (zero? b)
     a
-    (gcd2 b (mod a b))))
+    (recur b (mod a b))))
 
 (defn gcdn [aa] (reduce gcd2 aa))
 
