@@ -8,7 +8,7 @@
  *
  * To use GNU Multiple Precision Arithmetic Library:
  *
- * # g++ -o gcd-cpp-gmp -DGMP -lgmpxx -lgmp gcd.cpp
+ * # g++ -DGMP gcd.cpp -lgmpxx -lgmp -o gcd-cpp-gmp
  * # ./gcd-cpp-gmp 1234567890987654321 987654321234567
  * # 63
  *
@@ -18,15 +18,19 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-
-using namespace std;
+#if __cplusplus >= 201703L
+#include <execution>
+#include <numeric>
+#endif
 
 #ifdef GMP
 #include <gmpxx.h>
 typedef mpz_class Number;
 #else
 typedef unsigned int Number;
-#endif // GMP
+#endif
+
+using namespace std;
 
 typedef vector<Number> Numbers;
 
@@ -40,12 +44,25 @@ Number gcd(Number a, Number b) {
   return a;
 }
 
+#if __cplusplus >= 201703L
+class GCD {
+public:
+  Number operator()(Number a, Number b) const { return gcd(a, b); };
+} GCD;
+
+Number gcd(const Numbers &ns) {
+  return reduce(execution::par, begin(ns), end(ns), Number(0), GCD);
+}
+
+#else
+
 Number gcd(const Numbers &ns) {
   Number r = 0;
   for (Numbers::const_iterator n = ns.begin(); n != ns.end(); ++n)
     r = gcd(*n, r);
   return r;
 }
+#endif
 
 int main(int argc, char *argv[]) {
   if (argc > 1) {
