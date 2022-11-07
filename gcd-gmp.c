@@ -45,25 +45,22 @@ main (int argc, char *argv[])
   if (argc > 1)
     {
       n = argc - 1;
-      a = malloc (sizeof (mpz_t) * n);
-      if (NULL != a)
-        {
-          for (i = 1; i <= n; i++)
-            mpz_init_set_str (a[i - 1], argv[i], 10);
+      a = (mpz_t *) malloc (n * sizeof (mpz_t));
+      if (!a)
+        return EXIT_FAILURE;
 
-          mpz_init (g);
-          gcdn (g, a, n);
-          mpz_out_str (NULL, 10, g);
-          printf ("\n");
+      for (i = 1; i <= n; i++)
+        mpz_init_set_str (a[i - 1], argv[i], 10);
 
-          /* No need actually before exit */
-          mpz_clear (g);
-          for (i = 1; i <= n; i++)
-            mpz_clear (a[i - 1]);
-          free (a);
-          return EXIT_SUCCESS;
-        }
-      return EXIT_FAILURE;
+      mpz_init (g);
+      gcdn (g, a, n);
+      mpz_out_str (NULL, 10, g);
+      printf ("\n");
+
+      mpz_clear (g);
+      for (i = 1; i <= n; i++)
+        mpz_clear (a[i - 1]);
+      free (a);
     }
   return EXIT_SUCCESS;
 }
