@@ -5,16 +5,14 @@ import functools
 
 
 def gcd2(a, b):
-    if b == 0:
-        return a
-    else:
-        return gcd2(b, a % b)
+    while b != 0:
+        a, b = b, a % b
+    return a
 
 
-def gcdn(ns):
-    return functools.reduce(gcd2, ns)
+def gcdn(nums):
+    return functools.reduce(gcd2, nums)
 
 
-ints = map(int, sys.argv[1:])
-gcd = gcdn(ints)
-print(gcd)
+if len(sys.argv) > 1:
+    print(gcdn(map(int, sys.argv[1:])))
