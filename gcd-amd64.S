@@ -1,18 +1,36 @@
-# This program is for Linux on Intel x86_64 arch (64 bits).
+# This program is for amd64 arch (64 bits) running Linux, Solaris or FreeBSD.
 # Written for GNU Assembler (as) with AT&T syntax
-
-# To make an executable binary:
-# gcc -nostdlib gcd-x86_64-linux.s -o gcd-x86_64-linux
+#
+# Synopsis:
+#
+# $ gcc -nostdlib [-D OS=LINUX] gcd-amd64.S -o gcd-amd64-linux
 # or
-# as gcd-x86_64-linux.s -o gcd-x86_64-linux.o && \
-#    ld gcd-x86_64-linux.o -o gcd-x86_64-linux
+# $ cpp [-D OS=LINUX] gcd-amd64.S | as -o gcd-amd64-linux.o \
+#       && ld gcd-amd64-linux.o -o gcd-amd64-linux
+#
+#
+# $ gcc -nostdlib -D OS=SOLARIS gcd-amd64.S -o gcd-amd64-solaris
+# or
+# $ cpp -D OS=SOLARIS gcd-amd64.S | gas -64 -o gcd-amd64-solaris.o \
+#       && gld -m elf_x86_64_sol2 gcd-amd64-solaris.o -o gcd-amd64-solaris
+#
+# $ clang -nostdlib -D OS=FREEBSD gcd-amd64.S -o gcd-amd64-freebsd
+#
+
+#define LINUX 1
+#define SOLARIS 2
+#define FREEBSD 3
+
+#ifndef OS
+#define OS LINUX
+#endif
 
 
 .data
 
 # Buffer for output:
 buffer:
-    .space 64 # enough for 64 bits integer
+    .space 64 # enough for a 64-bit integer
 buf_end:
     .byte  10 # new line
 
@@ -28,7 +46,7 @@ buf_end:
 gcd2:
     and %rbx, %rbx # is %rbx == 0 ?
     jz  gcd2_exit  # %rbx == 0, go to exit and return %rax (GCD)
-    xor %rdx, %rdx # set %rdx = 0 */
+    xor %rdx, %rdx # set %rdx = 0
     div %rbx       # divide: %rdx:%rax / %rbx, actually: %rax / %rbx
     mov %rbx, %rax # drop quotient in %rax and keep prrvious %rbx in %rax
     mov %rdx, %rbx # put remainder in %rbx
@@ -57,13 +75,20 @@ next_digit:
     jnz next_digit # quotient is not 0, go on
 
     # printing the number:
-    mov $1,   %rax # syscall `write'
+#if OS == LINUX
+    mov $1, %rax # syscall `write'
+#elif OS == SOLARIS
+    mov $4, %rax # syscall `write'
+#elif OS == FREEBSD
+    mov $4, %rax # syscall `write'
+#else
+#error bad OS.
+#endif
     mov $1,   %rdi # write to stdout
     mov $buf_end, %rdx
     sub %rsi, %rdx # rdx is a number of characters to write (buf_end - rsi)
     inc %rdx       # + new line
     syscall        # do syscall (print the number at rsi)
-
     ret
 
 
@@ -97,11 +122,13 @@ str2uint_loop:
 # Entry point for the program
 _start:
 
-    # Access command line, see:
-    # http://www.cin.ufpe.br/~if817/arquivos/asmtut/index.html
-    # Example: ./gcd-x86_64-linux 11 22 33
+    # Access command line.
+    # Example: ./gcd-amd64-linux 11 22 33
+#if OS == FREEBSD
+    mov %rdi, %rsp
+#endif
     pop %rcx # Get the number of command-line options (4)
-    pop %rsi # Get the pointer to the program name (./gcd-x86_64-linux),
+    pop %rsi # Get the pointer to the program name (./gcd-amd64-linux),
     dec %rcx # minus program name
     jz exit  # no arguments are given - exiting
 
@@ -120,7 +147,15 @@ gcd_loop:
     call print # print rax with GCD
 
 exit:
-    mov $60,  %rax  # exit syscall
+#if OS == LINUX
+    mov $60, %rax # exit syscall
+#elif OS == SOLARIS
+    mov $1, %rax  # exit syscall
+#elif OS == FREEBSD
+    mov $1, %rax  # exit syscall
+#else
+#error bad OS.
+#endif
     xor %rdi, %rdi  # exit code = 0
     syscall
 

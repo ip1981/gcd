@@ -1,28 +1,36 @@
-# This program is for Solaris 11 on Intel x86 arch (32 bits).
+# This program is for Intel x86 arch (32 bits) running Linux, Solaris or FreeBSD.
 # Written for GNU Assembler (as) with AT&T syntax
-
-# To make an executable binary:
-# gcc -nostdlib gcd-x86-solaris.s -o gcd-x86-solaris
-# or
-# as gcd-x86-solaris.s -o gcd-x86-solaris.o && \
-#    ld gcd-x86-solaris.o -o gcd-x86-solaris
-
-# On 64 bits system:
-# gcc -m32 -nostdlib gcd-x86-solaris.s -o gcd-x86-solaris
-# or
-# as --32 gcd-x86-solaris.s -o gcd-x86-solaris.o && \
-#    ld -melf_i386 gcd-x86-solaris.o -o gcd-x86-solaris
 #
-# To run:
-# ./gcd-x86-solaris 11 22 33 121 792
-# (output should be 11)
+# Synopsis:
+#
+# $ gcc -nostdlib -m32 [-D OS=LINUX] gcd-x86.S -o gcd-x86-linux
+# or
+# $ cpp [-D OS=LINUX] gcd-x86.S | as -32 -o gcd-x86-linux.o \
+#       && ld -m elf_i386 gcd-x86-linux.o -o gcd-x86-linux
+#
+#
+# $ gcc -nostdlib -m32 -D OS=SOLARIS gcd-x86.S -o gcd-x86-solaris
+# or
+# $ cpp -D OS=SOLARIS gcd-x86.S | gas -32 -o gcd-x86-solaris.o \
+#       && gld -m elf_i386_sol2 gcd-x86-solaris.o -o gcd-x86-solaris
+#
+#
+# $ clang -nostdlib -m32 -D OS=FREEBSD gcd-x86.S -o gcd-x86-freebsd
+#
 
+#define LINUX 1
+#define SOLARIS 2
+#define FREEBSD 3
+
+#ifndef OS
+#define OS LINUX
+#endif
 
 .data
 
 # Buffer for output:
 buffer:
-    .space 32 # enough for 32 bits integer
+    .space 32 # enough for a 32-bit integer
 buf_end:
     .byte  10 # new line
 
@@ -38,7 +46,7 @@ buf_end:
 gcd2:
     and %ebx, %ebx # is %ebx == 0 ?
     jz  gcd2_exit  # %ebx == 0, go to exit and return %eax (GCD)
-    xor %edx, %edx # set %edx = 0 */
+    xor %edx, %edx # set %edx = 0
     div %ebx       # divide: %edx:%eax / %ebx, actually: %eax / %ebx
     mov %ebx, %eax # drop quotient in %eax and keep previous %ebx in %eax
     mov %edx, %ebx # put remainder in %ebx
@@ -65,19 +73,35 @@ next_digit:
     # now eax is a quotient
     and %eax, %eax # is quotient == 0 ?
     jnz next_digit # quotient is not 0, go on
-    
+
     # printing the number:
-    mov $4,   %eax # syscall `write'
     mov $buf_end, %edx
     sub %edi, %edx # edx is a number of characters to write (buf_end - edi)
     inc %edx       # + new line
+#if OS == LINUX
+    mov $4,   %eax # syscall `write'
+    mov $1,   %ebx # write to stdout
+    mov %edi, %ecx # first character to write
+    int $0x80      # do syscall (print the number)
+#elif OS == SOLARIS
+    mov $4,   %eax # syscall `write'
     push %edx
     push %edi # first character to write
     push $1   # write to stdout
     push $0   # dummy
     int $0x91 # do syscall (print the number)
     add $16, %esp # clean stack 16 = 4 pushs * 4 bytes (32 bits!)
-
+#elif OS == FREEBSD
+    mov $4,   %eax # syscall `write'
+    push %edx
+    push %edi # first character to write
+    push $1   # write to stdout
+    push $0   # dummy
+    int $0x80 # do syscall (print the number)
+    add $16, %esp # clean stack 16 = 4 pushs * 4 bytes (32 bits!)
+#else
+#error bad OS.
+#endif
     ret
 
 
@@ -111,11 +135,10 @@ str2uint_loop:
 # Entry point for the program
 _start:
 
-    # Access command line, see:
-    # http://www.cin.ufpe.br/~if817/arquivos/asmtut/index.html
-    # Example: ./gcd-x86-solaris 11 22 33
+    # Access command line.
+    # Example: ./gcd-x86-linux 11 22 33
     pop %ecx # Get the number of command-line options (4)
-    pop %esi # Get the pointer to the program name (./gcd-x86-solaris),
+    pop %esi # Get the pointer to the program name (./gcd-x86-linux),
     dec %ecx # minus program name
     jz exit  # no arguments are given - exiting
 
@@ -135,8 +158,21 @@ gcd_loop:
     call print # print eax with GCD
 
 exit:
+#if OS == LINUX
+    mov $1,   %eax  # exit syscall
+    xor %ebx, %ebx  # exit code = 0
+    int $0x80
+#elif OS == SOLARIS
     mov $1, %eax  # exit syscall
     push $0       # exit code = 0
     push $0       # dummy
     int $0x91
+#elif OS == FREEBSD
+    mov $1, %eax  # exit syscall
+    push $0       # exit code = 0
+    push $0       # dummy
+    int $0x80
+#else
+#error bad OS.
+#endif
 
