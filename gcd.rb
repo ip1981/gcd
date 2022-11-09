@@ -8,7 +8,6 @@ def gcd2 a, b
     end
 end
 
-# http://railspikes.com/2008/8/11/understanding-map-and-reduce
 def gcdn ns
     ns.reduce{ |a, b| gcd2 a, b }
 end
