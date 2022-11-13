@@ -12,6 +12,7 @@ program GCD
   character(len=20) :: tmpstr
 
   n = command_argument_count()
+  if (n == 0) stop
 
   allocate (ns(n))
 
