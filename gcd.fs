@@ -30,7 +30,8 @@
   r> 1 + >r
   repeat
   2drop
-  r> gcdn . cr
+  r>
+  dup 0 <> if gcdn . cr else drop endif
   ;
 
 main bye
