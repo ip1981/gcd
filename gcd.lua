@@ -21,5 +21,7 @@ function gcdn(ns)
     return r
 end
 
-print(gcdn(arg))
+if #arg ~= 0 then
+    print(gcdn(arg))
+end
 
