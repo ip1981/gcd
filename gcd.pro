@@ -6,8 +6,6 @@
 % # ./gcd-pro 22 33 44 121
 
 
-% 1st number, 2nd number, GCD
-
 % It is true that GCD of A and 0 is A
 % (The fact is GCD of A and 0 is A)
 gcd2(A, 0, A).
@@ -20,14 +18,18 @@ gcdn(A, [], A).
 gcdn(A, [B|Bs], G) :- gcd2(A, B, N), gcdn(N, Bs, G).
 gcdn([A|As], G) :- gcdn(A, As, G).
 
-:- initialization(main).
-
 str2int([], []).
 str2int([S|St], [N|Nt]) :- number_atom(N, S), str2int(St, Nt).
 
+not_empty([]) :- halt.
+not_empty(_).
+
 main :-
     argument_list(Args),
+    not_empty(Args),
     str2int(Args, Numbers),
     gcdn(Numbers, G),
     write(G), nl.
+
+:- initialization(main).
 
