@@ -27,7 +27,9 @@ let rec gcd a b =
 let gcdn = List.fold_left gcd 0 ;;
 
 let args = List.tl (Array.to_list Sys.argv) ;;
-let nums = List.map int_of_string args ;;
 
-Printf.printf "%d\n" (gcdn nums) ;;
+if args <> [] then begin
+  let nums = List.map int_of_string args
+  in Printf.printf "%d\n" (gcdn nums)
+end ;;
 
