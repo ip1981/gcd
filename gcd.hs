@@ -14,17 +14,16 @@ or:
 -}
 import System.Environment (getArgs)
 
-gcd2 :: Integer -> Integer -> Integer
+gcd2 :: Integral a => a -> a -> a
 gcd2 a 0 = a
 gcd2 a b = gcd2 b (a `rem` b)
 
-gcdn :: [Integer] -> Integer
+gcdn :: Integral a => [a] -> a
 gcdn = foldl1 gcd2
 
-str2int :: String -> Integer
-str2int = read
+out :: [String] -> IO ()
+out [] = return ()
+out a = print (gcdn (map read a) :: Integer)
 
 main :: IO ()
-main = do
-  a <- getArgs
-  print $ gcdn (map str2int a)
+main = getArgs >>= out
