@@ -27,17 +27,14 @@
 #include <gmpxx.h>
 typedef mpz_class Number;
 #else
-typedef unsigned int Number;
+typedef unsigned long Number;
 #endif
 
-using namespace std;
+using std::vector;
 
-typedef vector<Number> Numbers;
-
-Number gcd(Number a, Number b) {
-  Number c;
+template <class N> N gcd2(N a, N b) {
   while (b != 0) {
-    c = b;
+    N c = b;
     b = a % b;
     a = c;
   }
@@ -45,38 +42,35 @@ Number gcd(Number a, Number b) {
 }
 
 #if __cplusplus >= 201703L
-class GCD {
+template <class N> class GCD {
 public:
-  Number operator()(Number a, Number b) const { return gcd(a, b); };
-} GCD;
+  N operator()(N a, N b) const { return gcd2(a, b); };
+};
 
-Number gcd(const Numbers &ns) {
-  return reduce(execution::par, begin(ns), end(ns), Number(0), GCD);
+template <class N> N gcd(const vector<N> &ns) {
+  GCD<N> GCD;
+  return reduce(std::execution::par, begin(ns), end(ns), N(0), GCD);
 }
 
 #else
 
-Number gcd(const Numbers &ns) {
-  Number r = 0;
-  for (Numbers::const_iterator n = ns.begin(); n != ns.end(); ++n)
-    r = gcd(*n, r);
+template <class N> N gcd(const vector<N> &ns) {
+  N r = 0;
+  for (typename vector<N>::const_iterator n = ns.begin(); n != ns.end(); ++n)
+    r = gcd2(*n, r);
   return r;
 }
 #endif
 
 int main(int argc, char *argv[]) {
   if (argc > 1) {
-    Numbers ns(argc - 1);
+    vector<Number> ns(argc - 1);
     for (int n = 1; n < argc; ++n) {
-      stringstream str;
+      std::stringstream str;
       str << argv[n];
       str >> ns[n - 1];
-      /* NOTE:
-       * For GMP we can just assign: ns[n-1] = argv[n],
-       * and sstream is not needed.
-       */
     }
-    cout << gcd(ns) << endl;
+    std::cout << gcd(ns) << std::endl;
   }
   return EXIT_SUCCESS;
 }
