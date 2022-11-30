@@ -16,5 +16,7 @@ gcdn() {
     echo $r
 }
 
-gcdn $*
+if test $# -gt 0 ; then
+  gcdn $*
+fi
 
