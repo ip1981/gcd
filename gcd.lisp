@@ -15,15 +15,13 @@
 (defun program-args ()
   (or
    #+CLISP *args*
-   #+ECL (ext:command-args)
-   #+GCL si::*command-args*
-   #+SBCL *posix-argv*
+   #+ECL   (cdr ext:*unprocessed-ecl-command-args*)
+   #+GCL   (cdr si::*command-args*)
+   #+SBCL  (cdr *posix-argv*)
    nil))
 
 (defun numbers ()
-  (remove nil
-          (map 'list (lambda (x) (parse-integer x :junk-allowed t))
-               (program-args))))
+  (mapcar #'parse-integer (program-args)))
 
 (let ((ns (numbers)))
   (when ns
